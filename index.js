@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const indexRoute = require('./routes/index.route')
+const indexRoute = require('./routes/index.route');
+const projectRoute = require('./routes/project.route');
 
 const app = express();
 
@@ -10,6 +11,7 @@ mongoose.connect(process.env.MONGODB_URL, { useCreateIndex: true, useNewUrlParse
 app.set('port', process.env.PORT || 3001);
 
 app.use('/', indexRoute);
+app.use('/projects', projectRoute);
 
 app.listen(app.get('port'), () => {
   console.log(`The server is running under port ${app.get('port')}`)
