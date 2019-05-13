@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const projects = await Project.find();
-  res.json({projects: projects})
+  res.json({ projects: projects });
 });
 
 module.exports = router;

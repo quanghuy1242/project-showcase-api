@@ -14,5 +14,5 @@ app.use('/', indexRoute);
 app.use('/projects', projectRoute);
 
 app.listen(app.get('port'), () => {
-  console.log(`The server is running under port ${app.get('port')}`)
+  console.log(`The server is running under port ${app.get('port')}`);
 });
