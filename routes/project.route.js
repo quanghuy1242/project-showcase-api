@@ -5,7 +5,7 @@ const Project = require('../models/project.model');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const projects = await Project.find();
+  const projects = await Project.find().sort({ date: 'descending' });
   res.json({ projects: projects });
 });
 
