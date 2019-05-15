@@ -21,4 +21,10 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.get('/search', async (req, res) => {
+  const { query } = req.query;
+  const projects = await Project.find({ name: new RegExp(query, 'i') }).sort({ date: 'descending' });
+  res.json({ projects: projects });
+})
+
 module.exports = router;
