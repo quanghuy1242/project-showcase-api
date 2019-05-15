@@ -5,17 +5,14 @@ require('dotenv').config();
 const indexRoute = require('./routes/index.route');
 const projectRoute = require('./routes/project.route');
 
-const app = express();
+const header = require('./middlewares/header.middleware');
 
-app.all('/*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
+const app = express();
 
 mongoose.connect(process.env.MONGODB_URL, { useCreateIndex: true, useNewUrlParser: true });
 app.set('port', process.env.PORT || 3001);
 
+app.all('/*', header.fixHttpCORS);
 app.use('/', indexRoute);
 app.use('/projects', projectRoute);
 
