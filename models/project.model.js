@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 let projectSchema = mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
-  technical: { type: mongoose.Schema.Types.ObjectId, ref: 'Technical', required: true },
+  technology: { type: mongoose.Schema.Types.ObjectId, ref: 'Technology', required: true },
   date: { type: Date, required: true, default: Date.now },
   image: { type: String, required: true },
   url: { type: String, required: true },
