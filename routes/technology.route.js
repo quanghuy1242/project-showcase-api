@@ -1,9 +1,12 @@
 const express = require('express');
 
+const Technology = require('../models/technology.model');
+
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Hmmmm' })
+router.get('/', async (req, res) => {
+  const technologies = await Technology.find().sort({ nameId: "ascending" });
+  res.json({ technologies: technologies });
 });
 
 module.exports = router;
