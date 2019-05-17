@@ -15,8 +15,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) { return next(); }
   try {
+    if (!mongoose.Types.ObjectId.isValid(id)) { throw new Error('Can not find project with this id'); }
     const project = await Project.findById(id).populate('technology');
     res.json({ project: project });
   } catch (error) {
