@@ -16,7 +16,7 @@ app.set('port', process.env.PORT || 3001);
 app.all('/*', header.fixHttpCORS);
 app.use('/', indexRoute);
 app.use('/projects', projectRoute);
-app.use('/technologies', technologyRoute)
+app.use('/technologies', technologyRoute);
 
 app.listen(app.get('port'), () => {
   console.log(`The server is running under port ${app.get('port')}`);
