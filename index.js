@@ -5,6 +5,7 @@ require('dotenv').config();
 const indexRoute = require('./routes/index.route');
 const projectRoute = require('./routes/project.route');
 const technologyRoute = require('./routes/technology.route');
+const administratorRoute = require('./routes/administrator.route');
 
 const header = require('./middlewares/header.middleware');
 const error = require('./middlewares/error.middleware');
@@ -18,6 +19,7 @@ app.all('/*', header.fixHttpCORS);
 app.use('/', indexRoute);
 app.use('/projects', projectRoute);
 app.use('/technologies', technologyRoute);
+app.use('/administrator', administratorRoute);
 app.use(error.errorHandling);
 
 app.listen(app.get('port'), () => {
