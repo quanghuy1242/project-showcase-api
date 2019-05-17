@@ -7,6 +7,7 @@ const projectRoute = require('./routes/project.route');
 const technologyRoute = require('./routes/technology.route');
 
 const header = require('./middlewares/header.middleware');
+const error = require('./middlewares/error.middleware');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.all('/*', header.fixHttpCORS);
 app.use('/', indexRoute);
 app.use('/projects', projectRoute);
 app.use('/technologies', technologyRoute);
+app.use(error.errorHandling);
 
 app.listen(app.get('port'), () => {
   console.log(`The server is running under port ${app.get('port')}`);
