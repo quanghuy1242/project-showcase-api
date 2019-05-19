@@ -1,5 +1,6 @@
 const express = require('express');
 
+const Project = require('../models/project.model');
 const Technology = require('../models/technology.model');
 
 const router = express.Router();
@@ -14,7 +15,11 @@ router.get('/:nameId', async (req, res, next) => {
   try {
     const technology = await Technology.findOne({ nameId: nameId });
     if (!technology) { throw new Error('Can not found technology with this name Id'); }
-    res.json({ technology: technology });
+    const projects = await Project.find({ technology: technology._id }).populate('technology');
+    res.json({ technology: {
+      ...technology._doc,
+      projects: projects
+    } });
   } catch (error) {
     res.status(404).json({ message: 'Not Found' });
   }
