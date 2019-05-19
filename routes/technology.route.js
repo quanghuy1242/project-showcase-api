@@ -15,7 +15,7 @@ router.get('/:nameId', async (req, res, next) => {
   try {
     const technology = await Technology.findOne({ nameId: nameId });
     if (!technology) { throw new Error('Can not found technology with this name Id'); }
-    const projects = await Project.find({ technology: technology._id }).populate('technology');
+    const projects = await Project.find({ technology: technology._id });
     res.json({ technology: {
       ...technology._doc,
       projects: projects
