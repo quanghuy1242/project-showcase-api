@@ -7,10 +7,20 @@ const Technology = require('../models/technology.model'); // Cần để populat
 const router = express.Router();
 
 router.get('/', async (req, res) => {
+  const { compact } = req.query;
   const projects = await Project.find()
     .sort({ date: 'descending' })
     .populate('technology');
-  res.json({ projects: projects });
+  res.json({
+    projects: compact
+      ? projects.map(project => ({
+          _id: project._id, 
+          name: project.name,
+          date: project.date,
+          image: project.image
+      }))
+      : projects
+  });
 });
 
 router.get('/:id', async (req, res, next) => {
@@ -25,11 +35,20 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.get('/search', async (req, res) => {
-  const { query } = req.query;
+  const { query, compact } = req.query;
   const projects = await Project.find({ name: new RegExp(query, 'i') })
     .sort({ date: 'descending' })
     .populate('technology');
-  res.json({ projects: projects });
+    res.json({
+      projects: compact
+        ? projects.map(project => ({
+            _id: project._id, 
+            name: project.name,
+            date: project.date,
+            image: project.image
+        }))
+        : projects
+    });
 })
 
 module.exports = router;
