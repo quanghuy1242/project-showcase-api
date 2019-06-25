@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const User = require('../models/user.model');
 
-const verifyUser = require('../utils/verifyUser');
+// const verifyUser = require('../utils/verifyUser');
 
 const router = express.Router();
 
@@ -30,26 +30,26 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const verifyStatus = verifyUser({ username, password });
-    if (!verifyStatus.isValid) {
-      return res.status(401).json(verifyStatus);
-    }
-    const user = await User.findOne({ username: username });
-    if (user) {
-      return res.status(404).json({ msg: 'User already exist!' });
-    }
-    const newUser = new User({
-      username: username,
-      password: password
-    });
-    newUser.save();
-    return res.json({ msg: 'Successfull' });
-  } catch (error) {
-    res.status(401).json({ msg: 'An error happened!' });
-  }
-});
+// router.post('/register', async (req, res) => {
+//   const { username, password } = req.body;
+//   try {
+//     const verifyStatus = verifyUser({ username, password });
+//     if (!verifyStatus.isValid) {
+//       return res.status(401).json(verifyStatus);
+//     }
+//     const user = await User.findOne({ username: username });
+//     if (user) {
+//       return res.status(404).json({ msg: 'User already exist!' });
+//     }
+//     const newUser = new User({
+//       username: username,
+//       password: password
+//     });
+//     newUser.save();
+//     return res.json({ msg: 'Successfull' });
+//   } catch (error) {
+//     res.status(401).json({ msg: 'An error happened!' });
+//   }
+// });
 
 module.exports = router;
