@@ -16,17 +16,22 @@ router.post('/login', async (req, res) => {
       return res.status(403).json({ msg: 'No user has that username!' });
     }
     if (user.checkPassword(password)) {
-      const token = jwt.sign(
+      const accessToken = jwt.sign(
         { username: username },
         process.env.JWT_SECRET, 
         { expiresIn: process.env.JWT_EXPIRATION }
       );
-      return res.json({ username: username, token: token });
+      const refreshToken = jwt.sign(
+        { username: username },
+        process.env.JWT_SECRET_RF, 
+        { expiresIn: process.env.JWT_EXPIRATION_RF }
+      );
+      return res.json({ accessToken, refreshToken });
     } else {
       return res.status(403).json({ msg: 'Invalid Password!' });
     }
   } catch (error) {
-    res.status(401).json({ msg: 'An error happened!' });
+    res.status(400).json({ msg: 'An error happened!' });
   }
 });
 
