@@ -14,7 +14,6 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username: username });
-    console.log(user, username);
     if (!user) {
       return res.status(403).json({ msg: 'No user has that username!' });
     }
@@ -43,11 +42,11 @@ router.post('/login', async (req, res) => {
 
 router.post('/refresh_token', async (req, res) => {
   const { refreshToken } = req.body;
-  let user;
-  if (refreshToken) {
-    try {
-      user = JSON.parse(await rd.client.getAsync(refreshToken)); // Lấy từ redis, thông tin user
+  try {
+    if (refreshToken && (await rd.client.existsAsync(refreshToken))) {
       await verifyJwtToken(refreshToken, process.env.JWT_SECRET_RF); // Kiểm tra refreshToken
+
+      const user = JSON.parse(await rd.client.getAsync(refreshToken)); // Lấy từ redis, thông tin user
 
       // Nếu refreshToken valid và nó chưa hết hạn
       const accessToken = jwt.sign(
@@ -55,31 +54,12 @@ router.post('/refresh_token', async (req, res) => {
         process.env.JWT_SECRET, 
         { expiresIn: process.env.JWT_EXPIRATION }
       );
-      return res.json({ accessToken, refreshToken }); // Response accessToken mới và refreshToken cũ
-    } catch (error) {
-      if (error.name === 'TokenExpiredError') {
-        // Refresh Token is expired
-        const accessToken = jwt.sign(
-          { username: user.username },
-          process.env.JWT_SECRET, 
-          { expiresIn: process.env.JWT_EXPIRATION }
-        );
-        const newRefreshToken = jwt.sign(
-          { username: user.username },
-          process.env.JWT_SECRET_RF, 
-          { expiresIn: process.env.JWT_EXPIRATION_RF }
-        );
-        rd.client.del(refreshToken); // Xoá refreshToken cũ trong redis
-        rd.client.set(newRefreshToken, JSON.stringify(user)); // Lưu lại refreshToken mới trong redis
-        return res.json({ accessToken, newRefreshToken }); // Response accessToken mới và refreshToken mới
-      } else {
-        // Invalid Refresh Token
-        console.error(error);
-        res.status(403).json({ msg: 'Invalid Refresh Token' });
-      }
+      return res.json({ accessToken, refreshToken }); // Response accessToken mới
+    } else {
+      res.status(400).json({ msg: 'Bad Request' });
     }
-  } else {
-    res.status(400).json({ msg: 'No refresh token provided' });
+  } catch (error) {
+    res.status(403).json({ msg: 'Invalid or Expired Refresh Token' });
   }
 })
 
@@ -105,12 +85,14 @@ router.post('/refresh_token', async (req, res) => {
 //   }
 // });
 
-// router.get('/redis', (req, res) => {
+// router.get('/redis', async (req, res) => {
 //   // rd.client.keys('*', (err, keys) => {
 //   //   res.json(keys);
 //   // })
-//   // const a = rd.client.getAsync(undefined);
+//   // const a = await rd.client.getAsync(undefined);
 //   // res.json(a);
+//   // const b = await rd.client.existsAsync('a');
+//   // res.json({ exists: b });
 // })
 
 module.exports = router;
