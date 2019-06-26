@@ -54,7 +54,7 @@ router.post('/refresh_token', async (req, res) => {
         process.env.JWT_SECRET, 
         { expiresIn: process.env.JWT_EXPIRATION }
       );
-      return res.json({ accessToken, refreshToken }); // Response accessToken mới
+      return res.json({ accessToken }); // Response accessToken mới
     } else {
       res.status(400).json({ msg: 'Bad Request' });
     }
