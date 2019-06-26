@@ -2,7 +2,9 @@ const verifyJwtToken = require('../utils/verifyJwtToken');
 require('dotenv').config();
 
 module.exports.privateRoute = async (req, res, next) => {
-  const token = req.body.token || req.query.token || req.headers['x-access-token'];
+  const token = req.headers['authorization'] || req.headers['x-access-token'];
+  if (token.startsWith('Bearer ')) { token = token.slice(7); }
+  
   if (!token) {
     return res.status(403).json({ msg: 'No token provided.' })
   }
