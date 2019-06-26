@@ -13,7 +13,7 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ username: username });
     if (!user) {
-      return res.status(404).json({ msg: 'No user has that username!' });
+      return res.status(403).json({ msg: 'No user has that username!' });
     }
     if (user.checkPassword(password)) {
       const token = jwt.sign(
@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
       );
       return res.json({ username: username, token: token });
     } else {
-      return res.status(404).json({ msg: 'Invalid Password!' });
+      return res.status(403).json({ msg: 'Invalid Password!' });
     }
   } catch (error) {
     res.status(401).json({ msg: 'An error happened!' });
