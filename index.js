@@ -14,7 +14,12 @@ const error = require('./middlewares/error.middleware');
 
 const app = express();
 
-mongoose.connect(process.env.MONGODB_URL, { useCreateIndex: true, useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URL, {
+  useCreateIndex: true, 
+  useNewUrlParser: true,
+  useFindAndModify: false
+});
+
 app.set('port', process.env.PORT || 3001);
 app.use(bodyParser.json());
 
