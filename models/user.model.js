@@ -5,7 +5,8 @@ const SALT_FACTOR = 10;
 let userSchema = mongoose.Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
-  role: String
+  role: String,
+  refreshToken: String
 });
 
 userSchema.pre('save', function(done) {
