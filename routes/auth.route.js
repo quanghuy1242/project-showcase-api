@@ -27,6 +27,8 @@ router.post('/login', async (req, res) => {
     if (!user.checkPassword(password)) {
       return res.status(403).json({ msg: 'Invalid Password!' });
     }
+    // Xoá password ra khỏi user object
+    const userWithoutPassword = (({password, ...rest}) => rest)(user.toObject({ getters: true }));
     let hasToken = false;
     if (user.refreshToken) {
       try { // đi verify token này
@@ -38,7 +40,7 @@ router.post('/login', async (req, res) => {
     else {
       // Nếu chưa có thì tạo mới một cái rồi lưu nó vô db
       refreshToken = jwt.sign( // Tạo mới refreshToken
-        { username: username },
+        userWithoutPassword,
         process.env.JWT_SECRET_RF, 
         { expiresIn: process.env.JWT_EXPIRATION_RF }
       );
@@ -48,7 +50,7 @@ router.post('/login', async (req, res) => {
       );
     }
     const accessToken = jwt.sign(
-      { username: username },
+      userWithoutPassword,
       process.env.JWT_SECRET, 
       { expiresIn: process.env.JWT_EXPIRATION }
     );
@@ -72,13 +74,15 @@ router.post('/refresh_token', async (req, res) => {
       // Nếu refreshToken valid và nó chưa hết hạn thì trả về hai token mới
       // Nếu để lâu quá mà user không request cái gì thì refreshToken sẽ hết hạn luôn
       // Lúc đó thì trời cứu, chỉ có nước đăng nhập lại
+      // Xoá password ra khỏi user object
+      const userWithoutPassword = (({password, ...rest}) => rest)(user.toObject({ getters: true }));
       const accessToken = jwt.sign(
-        { username: user.username },
+        userWithoutPassword,
         process.env.JWT_SECRET, 
         { expiresIn: process.env.JWT_EXPIRATION }
       );
       const newRefreshToken = jwt.sign(
-        { username: user.username },
+        userWithoutPassword,
         process.env.JWT_SECRET_RF, 
         { expiresIn: process.env.JWT_EXPIRATION_RF }
       );
