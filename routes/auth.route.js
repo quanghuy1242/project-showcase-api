@@ -28,7 +28,7 @@ router.post('/login', async (req, res) => {
       return res.status(403).json({ msg: 'Invalid Password!' });
     }
     // Xoá password ra khỏi user object
-    const userWithoutPassword = (({password, ...rest}) => rest)(user.toObject({ getters: true }));
+    const userWithoutPassword = user.toPayload();
     let hasToken = false;
     if (user.refreshToken) {
       try { // đi verify token này
@@ -75,7 +75,7 @@ router.post('/refresh_token', async (req, res) => {
       // Nếu để lâu quá mà user không request cái gì thì refreshToken sẽ hết hạn luôn
       // Lúc đó thì trời cứu, chỉ có nước đăng nhập lại
       // Xoá password ra khỏi user object
-      const userWithoutPassword = (({password, ...rest}) => rest)(user.toObject({ getters: true }));
+      const userWithoutPassword = user.toPayload();
       const accessToken = jwt.sign(
         userWithoutPassword,
         process.env.JWT_SECRET, 
