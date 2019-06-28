@@ -6,6 +6,13 @@ require('dotenv').config();
 const User = require('../models/user.model');
 
 // const verifyUser = require('../utils/verifyUser');
+const auth = require('../middlewares/auth.middleware');
+const cookieOptions = {
+  httpOnly: true,
+  expires: new Date(Date.now() + 2592000000), // Một tháng
+  signed: true,
+  secure: process.env.PRODUCTION ? true : false
+}
 
 const router = express.Router();
 
@@ -45,14 +52,19 @@ router.post('/login', async (req, res) => {
       process.env.JWT_SECRET, 
       { expiresIn: process.env.JWT_EXPIRATION }
     );
-    return res.json({ accessToken, refreshToken });
+    // trả dữ liệu về client
+    // res.clearCookie();
+    res.cookie('accessToken', accessToken, cookieOptions);
+    res.cookie('refreshToken', refreshToken, cookieOptions);
+    return res.json({ msg: 'Login Successfully' });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ msg: 'An error happened!' });
   }
 });
 
 router.post('/refresh_token', async (req, res) => {
-  const { refreshToken } = req.body;
+  const refreshToken = req.signedCookies.refreshToken;
   try {
     const user = await User.findOne({ refreshToken: refreshToken });
     if (refreshToken && user) { // Nếu request có chứa refreshToken và refreshToken có trong db
@@ -79,12 +91,43 @@ router.post('/refresh_token', async (req, res) => {
       ); 
       
       // Response accessToken và refreshToken mới
-      return res.json({ accessToken, refreshToken: newRefreshToken });
+      // res.clearCookie();
+      res.cookie('accessToken', accessToken, cookieOptions);
+      res.cookie('refreshToken', newRefreshToken, cookieOptions);
+      return res.json({ msg: 'Refresh token is successfully' });
     } else {
       res.status(400).json({ msg: 'Bad Request' });
     }
   } catch (error) {
     res.status(403).json({ msg: 'Invalid or Expired Refresh Token' });
+  }
+});
+
+router.post('/isAuthenticated', auth.privateRoute, (req, res) => {
+  res.json({ isAuthenticated: true });
+});
+
+router.post('/logout', async (req, res) => {
+  // Chỉ những request chứa token hợp lệ mới được logout
+  const accessToken = req.signedCookies.accessToken;
+  let isValid = undefined;
+  if (!accessToken) { isValid = false; } 
+  else {
+    try {
+      await verifyJwtToken(accessToken, process.env.JWT_SECRET);
+      isValid = true;
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        isValid = true;
+      } else { isValid = false; }
+    }
+  }
+  if (isValid) {
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    res.json({ msg: 'Logout Successfully' });
+  } else {
+    res.json({ msg: 'Invalid Token.' });
   }
 })
 
