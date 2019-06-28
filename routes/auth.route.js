@@ -112,7 +112,7 @@ router.post('/refresh_token', async (req, res) => {
 router.post('/isAuthenticated', auth.privateRoute, (req, res) => {
   res.json({
     isAuthenticated: true, 
-    ...req.body.fullDetail === "true" && req.decoded
+    ...req.body.fullDetail === true && req.decoded
   });
 });
 
