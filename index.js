@@ -25,7 +25,14 @@ app.set('port', process.env.PORT || 3001);
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET_COOKIE));
 
-app.use(cors());
+app.use(cors({
+  origin: function(origin, callback){
+    return callback(null, true);
+  },
+  optionsSuccessStatus: 200,
+  credentials: true
+}));
+
 app.use('/', indexRoute);
 app.use('/auth', authRoute);
 app.use('/projects', projectRoute);
