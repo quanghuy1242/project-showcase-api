@@ -6,7 +6,8 @@ let userSchema = mongoose.Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
   role: String,
-  refreshToken: String
+  refreshToken: String,
+  displayName: String
 });
 
 userSchema.pre('save', function(done) {
