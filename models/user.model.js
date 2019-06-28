@@ -29,5 +29,11 @@ userSchema.methods.checkPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 }
 
+userSchema.methods.toPayload = function() {
+  return (function({password, ...rest}) {
+    return rest;
+  })(this.toObject());
+}
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;
