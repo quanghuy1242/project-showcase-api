@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const indexRoute = require('./routes/index.route');
@@ -22,6 +23,7 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 app.set('port', process.env.PORT || 3001);
 app.use(bodyParser.json());
+app.use(cookieParser(process.env.SECRET_COOKIE));
 
 app.all('/*', header.fixHttpCORS);
 app.use('/', indexRoute);
