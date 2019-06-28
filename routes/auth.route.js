@@ -53,7 +53,6 @@ router.post('/login', async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRATION }
     );
     // trả dữ liệu về client
-    // res.clearCookie();
     res.cookie('accessToken', accessToken, cookieOptions);
     res.cookie('refreshToken', refreshToken, cookieOptions);
     return res.json({ msg: 'Login Successfully' });
@@ -91,7 +90,6 @@ router.post('/refresh_token', async (req, res) => {
       ); 
       
       // Response accessToken và refreshToken mới
-      // res.clearCookie();
       res.cookie('accessToken', accessToken, cookieOptions);
       res.cookie('refreshToken', newRefreshToken, cookieOptions);
       return res.json({ msg: 'Refresh token is successfully' });
