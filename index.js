@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -10,7 +11,6 @@ const technologyRoute = require('./routes/technology.route');
 const administratorRoute = require('./routes/administrator.route');
 const authRoute = require('./routes/auth.route');
 
-const header = require('./middlewares/header.middleware');
 const error = require('./middlewares/error.middleware');
 
 const app = express();
@@ -25,7 +25,7 @@ app.set('port', process.env.PORT || 3001);
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET_COOKIE));
 
-app.all('/*', header.fixHttpCORS);
+app.use(cors());
 app.use('/', indexRoute);
 app.use('/auth', authRoute);
 app.use('/projects', projectRoute);
