@@ -101,7 +101,11 @@ router.post('/refresh_token', async (req, res) => {
       res.status(400).json({ msg: 'Bad Request' });
     }
   } catch (error) {
-    res.status(403).json({ msg: 'Invalid or Expired Refresh Token' });
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ msg: 'Expired Token.' });
+    } else {
+      return res.status(403).json({ msg: 'Invalid Token.' })
+    }
   }
 });
 
