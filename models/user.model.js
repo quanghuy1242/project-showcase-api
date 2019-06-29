@@ -30,7 +30,7 @@ userSchema.methods.checkPassword = function(password) {
 }
 
 userSchema.methods.toPayload = function() {
-  return (function({password, ...rest}) {
+  return (function({password, refreshToken, ...rest}) {
     return rest;
   })(this.toObject());
 }
