@@ -7,8 +7,11 @@ const Technology = require('../models/technology.model'); // Cần để populat
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const { compact } = req.query;
-  const projects = await Project.find()
+  const { compact, query } = req.query;
+  const projects = await Project
+    .find({
+      ...(query) && { name: new RegExp(query, 'i') }
+    })
     .sort({ date: 'descending' })
     .populate('technology');
   res.json({
