@@ -37,21 +37,4 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.get('/search', async (req, res) => {
-  const { query, compact } = req.query;
-  const projects = await Project.find({ name: new RegExp(query, 'i') })
-    .sort({ date: 'descending' })
-    .populate('technology');
-    res.json({
-      projects: compact
-        ? projects.map(project => ({
-            _id: project._id, 
-            name: project.name,
-            date: project.date,
-            image: project.image
-        }))
-        : projects
-    });
-})
-
 module.exports = router;
