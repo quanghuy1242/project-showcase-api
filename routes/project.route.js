@@ -7,12 +7,12 @@ const Technology = require('../models/technology.model'); // Cần để populat
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const { compact, query } = req.query;
+  const { compact, query } = req.query; 
   const projects = await Project
     .find({
       ...(query) && { name: new RegExp(query, 'i') }
     })
-    .sort({ date: 'descending' })
+    .sort({ date: 'descending' }) 
     .populate('technology');
   res.json({
     projects: compact
@@ -35,6 +35,10 @@ router.get('/:id', async (req, res, next) => {
   } catch (error) {
     res.status(404).json({ message: 'Not Found' });
   }
+});
+
+router.post('/:id', (req, res, next) => {
+  const { name, briefDescription, description, technology, date, image, url, screenshots } = req.body;
 });
 
 module.exports = router;
