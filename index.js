@@ -26,9 +26,7 @@ app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET_COOKIE));
 
 app.use(cors({
-  origin: function(origin, callback){
-    return callback(null, true);
-  },
+  origin: (origin, callback) => callback(null, true),
   optionsSuccessStatus: 200,
   credentials: true
 }));
