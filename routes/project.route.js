@@ -37,8 +37,42 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/:id', (req, res, next) => {
+router.post('/:id', (req, res) => {
   const project = req.body.project;
+  if (!Project.isValid({ _id: undefined, ...project })) {
+    return res.status(400).json({ msg: 'Data is not valid' });
+  }
+  const newProject = new Project({
+    ...project
+  });
+  newProject.save();
+  return res.json({ msg: 'New Project is added to database' });
 });
+
+router.put('/:id', async (req, res) => {
+  const project = req.body.project;
+  if (!Project.isValid({ ...project })) {
+    return res.status(400).json({ msg: 'Data is not valid' });
+  }
+  const foundProject = await Project.findByIdAndUpdate(
+    project._id, { $set: { ...project } }
+  );
+  if (!foundProject) {
+    return res.json({ msg: `Project with provided id does not exist` })
+  }
+  return res.json({ msg: `The project with id ${project._id} is updated` })
+});
+
+router.delete('/:id', async (req, res) => {
+  const { _id } = req.body;
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(400).json({ msg: 'Data is not valid' });
+  }
+  const foundProject = await Project.findByIdAndDelete(_id);
+  if (!foundProject) {
+    return res.json({ msg: `Project with provided id does not exist` })
+  }
+  return res.json({ msg: `The project with id ${project._id} is deleted` });
+})
 
 module.exports = router;
