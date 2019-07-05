@@ -49,4 +49,18 @@ router.post('/:id', (req, res) => {
   return res.json({ msg: 'New Project is added to database' });
 });
 
+router.put('/:id', async (req, res) => {
+  const project = req.body.project;
+  if (!Project.isValid({ ...project })) {
+    return res.status(400).json({ msg: 'Data is not valid' });
+  }
+  const updatedProject = await Project.findByIdAndUpdate(
+    project._id, { $set: { ...project } }, { new: true }
+  );
+  res.json({
+    msg: `The project with id ${project._id} is updated`,
+    updatedProject: updatedProject
+  })
+});
+
 module.exports = router;
