@@ -11,15 +11,8 @@ let projectSchema = mongoose.Schema({
   screenshots: { type: [String] }
 });
 
-projectSchema.statics.isValidated = function({
-  name,
-  briefDescription,
-  description,
-  technology,
-  date,
-  image,
-  url,
-  screenshots
+projectSchema.statics.isValid = function({
+  name, briefDescription, description, technology, date, image, url, screenshots
 }) {
   if (!/.+/.test(name) && !/.+/.test(briefDescription) && !/.+/.test(description)) {
     return false;
