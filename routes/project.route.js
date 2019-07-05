@@ -54,13 +54,13 @@ router.put('/:id', async (req, res) => {
   if (!Project.isValid({ ...project })) {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
-  const updatedProject = await Project.findByIdAndUpdate(
-    project._id, { $set: { ...project } }, { new: true }
+  const foundProject = await Project.findByIdAndUpdate(
+    project._id, { $set: { ...project } }
   );
-  res.json({
-    msg: `The project with id ${project._id} is updated`,
-    updatedProject: updatedProject
-  })
+  if (!foundProject) {
+    return res.json({ msg: `Project with provided id does not exist` })
+  }
+  return res.json({ msg: `The project with id ${project._id} is updated` })
 });
 
 router.delete('/:id', async (req, res) => {
