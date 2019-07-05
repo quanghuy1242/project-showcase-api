@@ -12,8 +12,11 @@ let projectSchema = mongoose.Schema({
 });
 
 projectSchema.statics.isValid = function({
-  name, briefDescription, description, technology, date, image, url, screenshots
+  _id, name, briefDescription, description, technology, date, image, url, screenshots
 }) {
+  if (!mongoose.Types.ObjectId.isValid(_id) && _id !== undefined) {
+    return false;
+  }
   if (!/.+/.test(name) && !/.+/.test(briefDescription) && !/.+/.test(description)) {
     return false;
   }
