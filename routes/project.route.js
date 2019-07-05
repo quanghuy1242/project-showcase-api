@@ -39,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/:id', (req, res) => {
   const project = req.body.project;
-  if (!Project.isValid({ ...project })) {
+  if (!Project.isValid({ _id: undefined, ...project })) {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
   const newProject = new Project({
