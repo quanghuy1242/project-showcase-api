@@ -38,7 +38,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/:id', (req, res, next) => {
-  const { name, briefDescription, description, technology, date, image, url, screenshots } = req.body;
+  const project = req.body.project;
 });
 
 module.exports = router;
