@@ -62,7 +62,7 @@ router.put('/:id', auth.privateRoute, async (req, res) => {
     project._id, { $set: { ...project } }
   );
   if (!foundProject) {
-    return res.json({ msg: `Project with provided id does not exist` })
+    return res.status(404).json({ msg: `Project with provided id does not exist` })
   }
   return res.json({ msg: `The project with id ${project._id} is updated` })
 });
@@ -74,7 +74,7 @@ router.delete('/:id', auth.privateRoute, async (req, res) => {
   }
   const foundProject = await Project.findByIdAndDelete(_id);
   if (!foundProject) {
-    return res.json({ msg: `Project with provided id does not exist` })
+    return res.status(404).json({ msg: `Project with provided id does not exist` })
   }
   return res.json({ msg: `The project with id ${project._id} is deleted` });
 })
