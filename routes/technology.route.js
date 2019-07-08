@@ -27,7 +27,7 @@ router.get('/:nameId', async (req, res, next) => {
   }
 });
 
-router.post('/:nameId', auth.privateRoute, (req, res) => {
+router.post('/', auth.privateRoute, (req, res) => {
 
 });
 
