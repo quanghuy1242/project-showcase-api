@@ -28,7 +28,12 @@ router.get('/:nameId', async (req, res, next) => {
 });
 
 router.post('/', auth.privateRoute, (req, res) => {
-
+  const tech = req.body.tech;
+  if (!Technology.isValid({ _id: undefined, ...tech })) {
+    return res.status(400).json({ msg: 'Data is not valid' });
+  }
+  (new Technology({ ...tech })).save();
+  return res.json({ msg: 'New Technology is added to database' });
 });
 
 router.put('/:nameId', auth.privateRoute, (req, res) => {
