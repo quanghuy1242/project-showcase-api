@@ -3,6 +3,8 @@ const express = require('express');
 const Project = require('../models/project.model');
 const Technology = require('../models/technology.model');
 
+const auth = require('../middlewares/auth.middleware');
+
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -23,6 +25,18 @@ router.get('/:nameId', async (req, res, next) => {
   } catch (error) {
     res.status(404).json({ message: 'Not Found' });
   }
+});
+
+router.post('/:nameId', auth.privateRoute, (req, res) => {
+
+});
+
+router.put('/:nameId', auth.privateRoute, (req, res) => {
+
+});
+
+router.delete('/:nameId', auth.privateRoute, (req, res) => {
+
 });
 
 module.exports = router;
