@@ -37,11 +37,29 @@ router.post('/', auth.privateRoute, (req, res) => {
 });
 
 router.put('/:nameId', auth.privateRoute, (req, res) => {
-
+  const tech = req.body.tech;
+  if (!Technology.isValid({ ...tech })) {
+    return res.status(400).json({ msg: 'Data is not valid' });
+  }
+  const foundTech = await Technology.findByIdAndUpdate(
+    tech._id, { $set: { ...tech } }
+  );
+  if (!foundTech) {
+    return res.status(404).json({ msg: `Technology with provided id does not exist` });
+  }
+  return res.json({ msg: `The Technology with id ${project._id} is updated` });
 });
 
 router.delete('/:nameId', auth.privateRoute, (req, res) => {
-
+  const tech = req.body.tech;
+  if (!Technology.isValid({ ...tech })) {
+    return res.status(400).json({ msg: 'Data is not valid' });
+  }
+  const foundTech = await Technology.findByIdAndDelete(tech._id);
+  if (!foundTech) {
+    return res.status(404).json({ msg: `Technology with provided id does not exist` });
+  }
+  return res.json({ msg: `The Technology with id ${project._id} is updated` });
 });
 
 module.exports = router;
