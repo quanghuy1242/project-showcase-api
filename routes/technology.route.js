@@ -44,7 +44,7 @@ router.put('/:nameId', auth.privateRoute, async (req, res) => {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
   const foundTech = await Technology.findOneAndUpdate(
-    { nameId: nameId }, { $set: { ...tech } }
+    { nameId: nameId }, { $set: { ...tech, _id: tech._id, nameId: nameId } }
   );
   if (!foundTech) {
     return res.status(404).json({ msg: `Technology with provided id does not exist` });
