@@ -39,11 +39,12 @@ router.post('/', auth.privateRoute, (req, res) => {
 
 router.put('/:nameId', auth.privateRoute, async (req, res) => {
   const tech = req.body.tech;
+  const { nameId } = req.params;
   if (!Technology.isValid({ ...tech })) {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
-  const foundTech = await Technology.findByIdAndUpdate(
-    tech._id, { $set: { ...tech } }
+  const foundTech = await Technology.findOneAndUpdate(
+    { nameId: nameId }, { $set: { ...tech } }
   );
   if (!foundTech) {
     return res.status(404).json({ msg: `Technology with provided id does not exist` });
