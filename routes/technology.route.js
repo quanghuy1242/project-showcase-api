@@ -36,7 +36,7 @@ router.post('/', auth.privateRoute, (req, res) => {
   return res.json({ msg: 'New Technology is added to database' });
 });
 
-router.put('/:nameId', auth.privateRoute, (req, res) => {
+router.put('/:nameId', auth.privateRoute, async (req, res) => {
   const tech = req.body.tech;
   if (!Technology.isValid({ ...tech })) {
     return res.status(400).json({ msg: 'Data is not valid' });
@@ -50,7 +50,7 @@ router.put('/:nameId', auth.privateRoute, (req, res) => {
   return res.json({ msg: `The Technology with id ${project._id} is updated` });
 });
 
-router.delete('/:nameId', auth.privateRoute, (req, res) => {
+router.delete('/:nameId', auth.privateRoute, async (req, res) => {
   const tech = req.body.tech;
   if (!Technology.isValid({ ...tech })) {
     return res.status(400).json({ msg: 'Data is not valid' });
