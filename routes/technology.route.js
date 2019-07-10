@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
 const Project = require('../models/project.model');
 const Technology = require('../models/technology.model');
@@ -50,16 +51,16 @@ router.put('/:nameId', auth.privateRoute, async (req, res) => {
   return res.json({ msg: `The Technology with id ${tech._id} is updated` });
 });
 
-router.delete('/:nameId', auth.privateRoute, async (req, res) => {
-  const tech = req.body.tech;
-  if (!Technology.isValid({ ...tech })) {
+router.delete('/:id', auth.privateRoute, async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
-  const foundTech = await Technology.findByIdAndDelete(tech._id);
+  const foundTech = await Technology.findByIdAndDelete(id);
   if (!foundTech) {
     return res.status(404).json({ msg: `Technology with provided id does not exist` });
   }
-  return res.json({ msg: `The Technology with id ${tech._id} is updated` });
+  return res.json({ msg: `The Technology with id ${id} is deleted` });
 });
 
 module.exports = router;
