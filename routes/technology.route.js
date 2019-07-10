@@ -47,7 +47,7 @@ router.put('/:nameId', auth.privateRoute, async (req, res) => {
   if (!foundTech) {
     return res.status(404).json({ msg: `Technology with provided id does not exist` });
   }
-  return res.json({ msg: `The Technology with id ${project._id} is updated` });
+  return res.json({ msg: `The Technology with id ${tech._id} is updated` });
 });
 
 router.delete('/:nameId', auth.privateRoute, async (req, res) => {
@@ -59,7 +59,7 @@ router.delete('/:nameId', auth.privateRoute, async (req, res) => {
   if (!foundTech) {
     return res.status(404).json({ msg: `Technology with provided id does not exist` });
   }
-  return res.json({ msg: `The Technology with id ${project._id} is updated` });
+  return res.json({ msg: `The Technology with id ${tech._id} is updated` });
 });
 
 module.exports = router;
