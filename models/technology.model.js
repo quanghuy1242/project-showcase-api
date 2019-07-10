@@ -14,8 +14,8 @@ technologySchema.statics.isValid = function({
     return false;
   }
   if (!/[a-zA-Z]+/.test(nameId)) { return false; }
-  if (!name.length !== 0) { return false; }
-  if (!description.length !== 0) { return false; }
+  if (!(name.length !== 0)) { return false; }
+  if (!(description.length !== 0)) { return false; }
   if (!/(http|https):\/\/.+/.test(image)) { return false; }
   return true;
 }
