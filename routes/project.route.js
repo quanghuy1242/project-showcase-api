@@ -41,10 +41,13 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', auth.privateRoute, (req, res) => {
+router.post('/', auth.privateRoute, async (req, res) => {
   const project = req.body.project;
   if (!Project.isValid({ _id: undefined, ...project })) {
     return res.status(400).json({ msg: 'Data is not valid' });
+  }
+  if (!await Technology.findById(project.technology)) {
+    return res.status(404).json({ msg: 'Cannot find the technology with provide id' })
   }
   const newProject = new Project({
     ...project
@@ -55,11 +58,15 @@ router.post('/', auth.privateRoute, (req, res) => {
 
 router.put('/:id', auth.privateRoute, async (req, res) => {
   const project = req.body.project;
+  const { id } = req.params;
   if (!Project.isValid({ ...project })) {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
+  if (!await Technology.findById(project.technology)) {
+    return res.status(404).json({ msg: 'Cannot find the technology with provide id' })
+  }
   const foundProject = await Project.findByIdAndUpdate(
-    project._id, { $set: { ...project } }
+    id, { $set: { ...project } }
   );
   if (!foundProject) {
     return res.status(404).json({ msg: `Project with provided id does not exist` })
@@ -68,15 +75,15 @@ router.put('/:id', auth.privateRoute, async (req, res) => {
 });
 
 router.delete('/:id', auth.privateRoute, async (req, res) => {
-  const { _id } = req.body;
+  const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
-  const foundProject = await Project.findByIdAndDelete(_id);
+  const foundProject = await Project.findByIdAndDelete(id);
   if (!foundProject) {
     return res.status(404).json({ msg: `Project with provided id does not exist` })
   }
-  return res.json({ msg: `The project with id ${project._id} is deleted` });
+  return res.json({ msg: `The project with id ${id} is deleted` });
 })
 
 module.exports = router;
