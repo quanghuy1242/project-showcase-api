@@ -76,7 +76,7 @@ router.put('/:id', auth.privateRoute, async (req, res) => {
 
 router.delete('/:id', auth.privateRoute, async (req, res) => {
   const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(_id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
   const foundProject = await Project.findByIdAndDelete(id);
