@@ -26,7 +26,6 @@ projectSchema.statics.isValid = function({
   if (!/(http|https):\/\/.+/.test(image) && !/(http|https):\/\/.+/.test(url)) {
     return false;
   }
-  if (!(date instanceof Date)) { return false; }
   if (!screenshots.length) {  }
   return true;
 };
