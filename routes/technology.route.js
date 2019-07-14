@@ -52,16 +52,16 @@ router.put('/:nameId', auth.privateRoute, async (req, res) => {
   return res.json({ msg: `The Technology with id ${tech._id} is updated` });
 });
 
-router.delete('/:id', auth.privateRoute, async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+router.delete('/:nameId', auth.privateRoute, async (req, res) => {
+  const { nameId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(nameId)) {
     return res.status(400).json({ msg: 'Data is not valid' });
   }
-  const foundTech = await Technology.findByIdAndDelete(id);
+  const foundTech = await Technology.findOneAndDelete({ nameId: nameId });
   if (!foundTech) {
     return res.status(404).json({ msg: `Technology with provided id does not exist` });
   }
-  return res.json({ msg: `The Technology with id ${id} is deleted` });
+  return res.json({ msg: `The Technology with id ${nameId} is deleted` });
 });
 
 module.exports = router;
