@@ -1,5 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const md = require('markdown-it')({
+  html: true,
+  linkify: true,
+  typographer: true
+});
 
 const Project = require('../models/project.model');
 const Technology = require('../models/technology.model'); // Cần để populate
@@ -35,7 +40,7 @@ router.get('/:id', async (req, res, next) => {
       throw new Error('Can not find project with this id');
     }
     const project = await Project.findById(id).populate('technology');
-    res.json({ project: project });
+    res.json({ project: { ...project.toObject(), descriptionHTML: md.render(project.description) } });
   } catch (error) {
     res.status(404).json({ message: 'Not Found' });
   }
