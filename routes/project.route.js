@@ -27,7 +27,8 @@ router.get('/', async (req, res) => {
           _id: project._id, 
           name: project.name,
           date: project.date,
-          image: project.image
+          image: project.image,
+          technology: { name: project.technology.name }
       }))
       : projects
   });
