@@ -8,7 +8,12 @@ let administratorSchema = mongoose.Schema({
   slogan: { type: String, required: true },
   introduction: { type: String, required: true },
   skill: { type: String, required: true },
-  contact: { type: String, required: true }
+  contact: { type: String, required: true },
+  facebook: { type: String },
+  twitter: { type: String },
+  instagram: { type: String },
+  wordpress: { type: String },
+  github: { type: String }
 });
 
 administratorSchema.statics.isValid = function(
