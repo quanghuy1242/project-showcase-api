@@ -133,8 +133,8 @@ router.post('/logout', async (req, res) => {
     }
   }
   if (isValid) {
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken', cookieOptions);
+    res.clearCookie('refreshToken', cookieOptions);
     res.json({ msg: 'Logout Successfully' });
   } else {
     res.json({ msg: 'Invalid Token.' });
