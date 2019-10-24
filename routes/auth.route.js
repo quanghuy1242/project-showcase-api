@@ -11,7 +11,8 @@ const cookieOptions = {
   httpOnly: true,
   expires: new Date(Date.now() + 2592000000), // Một tháng
   signed: true,
-  // secure: process.env.PRODUCTION ? true : false
+  sameSite: 'none',
+  secure: true
 }
 
 const router = express.Router();
