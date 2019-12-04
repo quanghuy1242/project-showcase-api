@@ -18,7 +18,8 @@ const app = express();
 mongoose.connect(process.env.MONGODB_URL, {
   useCreateIndex: true, 
   useNewUrlParser: true,
-  useFindAndModify: false
+  useFindAndModify: false,
+  useUnifiedTopology: true
 });
 
 app.set('port', process.env.PORT || 3001);
