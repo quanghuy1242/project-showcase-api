@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -12,6 +11,7 @@ const administratorRoute = require('./routes/administrator.route');
 const authRoute = require('./routes/auth.route');
 
 const error = require('./middlewares/error.middleware');
+const cors = require('./middlewares/cors.middleware');
 
 const app = express();
 
@@ -26,21 +26,7 @@ app.set('port', process.env.PORT || 3001);
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET_COOKIE));
 
-app.use(cors((req, callback) => {
-  const whitelist = process.env.ALLOW_ORIGIN.split(';');
-  const clientAPIKey = req.header('CLIENT-KEY');
-  callback(null, {
-    origin: (origin, callback) => {
-      if (whitelist.includes(origin) || clientAPIKey === process.env.CLIENT_KEY) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    optionsSuccessStatus: 200,
-    credentials: true
-  });
-}));
+app.use(cors.corsHandling);
 
 app.use('/', indexRoute);
 app.use('/auth', authRoute);
